@@ -21,7 +21,7 @@ namespace Letsencrypt.Azure.Core.Test
         {
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<TestHelper>()
-                  .Build();
+                .Build();
 
             tenantId = config["tenantId"];
             subscriptionId = config["subscriptionId"];
@@ -46,13 +46,30 @@ namespace Letsencrypt.Azure.Core.Test
             get
             {
                 var config = new ConfigurationBuilder()
-          .AddUserSecrets<UnoEuroDnsProviderTest>()
-          .Build();
+                    .AddUserSecrets<UnoEuroDnsProviderTest>()
+                    .Build();
 
                 return new UnoEuroDnsProvider(new UnoEuroDnsSettings()
                 {
                     AccountName = config["accountName"],
                     ApiKey = config["apiKey"],
+                    Domain = config["domain"]
+                });
+            }
+        }
+
+        public static DnsMadeEasyProvider DnsMadeEasyProvider
+        {
+            get
+            {
+                var config = new ConfigurationBuilder()
+                    .AddUserSecrets<DnsMadeEasyProviderTest>()
+                    .Build();
+
+                return new DnsMadeEasyProvider(new DnsMadeEasySettings()
+                {
+                    ApiKey = config["apiKey"],
+                    ApiSecret = config["apiSecret"],
                     Domain = config["domain"]
                 });
             }

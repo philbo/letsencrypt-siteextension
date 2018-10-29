@@ -50,12 +50,18 @@ namespace LetsEncrypt.Azure.Runner
             if (Configuration.GetSection("DnsSettings").Get<GoDaddyDnsProvider.GoDaddyDnsSettings>().ShopperId != null)
             {
                 serviceCollection.AddAcmeClient<GoDaddyDnsProvider>(Configuration.GetSection("DnsSettings").Get<GoDaddyDnsProvider.GoDaddyDnsSettings>(), azureStorageConnectionString);
-            } else if (Configuration.GetSection("DnsSettings").Get<UnoEuroDnsSettings>().AccountName != null)
+            } 
+            else if (Configuration.GetSection("DnsSettings").Get<UnoEuroDnsSettings>().AccountName != null)
             {
                 serviceCollection.AddAcmeClient<UnoEuroDnsProvider>(Configuration.GetSection("DnsSettings").Get<UnoEuroDnsSettings>(), azureStorageConnectionString);
-            } else if (Configuration.GetSection("DnsSettings").Get<AzureDnsSettings>().ResourceGroupName != null)
+            } 
+            else if (Configuration.GetSection("DnsSettings").Get<AzureDnsSettings>().ResourceGroupName != null)
             {
                 serviceCollection.AddAcmeClient<AzureDnsProvider>(Configuration.GetSection("DnsSettings").Get<AzureDnsSettings>(), azureStorageConnectionString);
+            } 
+            else if (Configuration.GetSection("DnsSettings").Get<DnsMadeEasySettings>().ApiKey != null)
+            {
+                serviceCollection.AddAcmeClient<DnsMadeEasyProvider>(Configuration.GetSection("DnsSettings").Get<DnsMadeEasySettings>(), azureStorageConnectionString);
             }
 
             serviceCollection.AddTransient<App>();

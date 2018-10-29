@@ -136,5 +136,40 @@ namespace Letsencrypt.Azure.Core.Test
 
             await certService.Install(res);
         }
+
+        [TestMethod]
+        public async Task TestEndToEndDnsMadeEasy()
+        {
+
+            var dnsProvider = new DnsMadeEasyProviderTest().DnsService;
+
+            var manager = new AcmeClient(dnsProvider, new DnsLookupService());
+
+            var dnsRequest = new AcmeDnsRequest()
+            {
+                Host = "*.åbningstider.info",
+                PFXPassword = "Pass@word",
+                RegistrationEmail = "mail@sjkp.dk",
+                AcmeEnvironment = new LetsEncryptStagingV2(),
+                CsrInfo = new CsrInfo()
+                {
+                    CountryName = "DK",
+                    Locality = "Copenhagen",
+                    Organization = "Sjkp",
+                    OrganizationUnit = "",
+                    State = "DK"
+                }
+            };
+
+            var res = await manager.RequestDnsChallengeCertificate(dnsRequest);
+
+            Assert.IsNotNull(res);
+
+            File.WriteAllBytes($"{dnsRequest.Host.Substring(2)}.pfx", res.CertificateInfo.PfxCertificate);
+
+            var certService = new AzureWebAppService(new[] { TestHelper.AzureWebAppSettings });
+
+            await certService.Install(res);
+        }
     }
 }
